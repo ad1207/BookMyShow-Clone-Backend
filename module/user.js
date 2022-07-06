@@ -233,3 +233,12 @@ module.exports.getMoviesbyName = async (req,res,next) => {
         res.send(err)
     }
 }
+
+module.exports.signout = async (req,res,next) =>{
+    try{
+        res.clearCookie('token')
+        res.send("Cookie removed")
+    }catch(err){
+        res.send(err)
+    }
+}

@@ -12,6 +12,6 @@ router.post('/book',auth,userModule.bookMovie)
 router.get('/bookedShows',auth,userModule.getBookedMovies)
 router.get('/movies',auth,userModule.getMovies)
 router.get('/movies/:name',auth,userModule.getMoviesbyName)
-
+router.get('/signout',userModule.signout)
 
 module.exports = router
