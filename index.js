@@ -4,6 +4,8 @@ const mongo = require("./database")
 const adminRoute = require("./routes/admin") 
 const userRoute = require("./routes/user")
 const cors = require("cors")
+const cookieParser = require('cookie-parser');
+
 
 
 
@@ -13,6 +15,7 @@ const app = express()
 app.use(express.json())
 mongo.connect()
 app.use(cors())
+app.use(cookieParser());
 
 app.get("/",(req,res) => {
     res.status(200).send("Welcome To BookMyShow")

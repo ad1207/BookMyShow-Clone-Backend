@@ -8,7 +8,10 @@ router.post('/login',adminModule.loginAdmin)
 router.post('/create',auth,adminModule.createTheater)
 router.put('/update',auth,adminModule.updateTheater)
 router.get('/getTheater',auth,adminModule.getTheater)
+router.get('/getTheater/:name',auth,adminModule.getTheaterByName)
 router.get('/welcome',auth,adminModule.welcome)
 router.get('/bookedShows',auth,adminModule.getBookedMovies)
-
+router.get('/bookedShows/:theater/:movie/:date',auth,adminModule.getBookedMoviesD)
+router.get('/movies',auth,adminModule.getMovies)
+router.get('/movies/:name',auth,adminModule.getMoviesbyName)
 module.exports = router

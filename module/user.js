@@ -43,6 +43,7 @@ module.exports.registerUser = async (req,res,next) => {
             password:newUser.password,
             token:token
         }
+        res.cookie("token",token,{maxAge:3600000})
 
         res.status(201).send(user)
 
@@ -66,7 +67,7 @@ module.exports.loginUser = async (req,res,next) => {
                 {user_id:email},
                 process.env.TOKEN_KEY,
                 {
-                    expiresIn: "5h"
+                    expiresIn: "1h"
                 }
             )
 
@@ -78,6 +79,7 @@ module.exports.loginUser = async (req,res,next) => {
                 password: user.password,
                 token: token
             }
+            res.cookie("token",token,{maxAge:3600000})
 
             return res.status(200).send(user)
         }
@@ -147,9 +149,19 @@ module.exports.bookMovie = async (req,res,next) => {
     }
 }
 
-module.exports.getMovies = async (req,res,next) => {
+module.exports.getTheater = async (req,res,next) => {
     try{
         let list = await mongo.selectedDb.collection('theaterDetails').find().toArray()
+        res.send(list)
+    }catch(err){
+        console.log(err)
+        res.send(err)
+    }
+}
+
+module.exports.getTheaterByName = async (req,res,next) => {
+    try{
+        let list = await mongo.selectedDb.collection('theaterDetails').find({name:req.params.name}).toArray()
         res.send(list)
     }catch(err){
         console.log(err)
@@ -166,4 +178,58 @@ module.exports.getBookedMovies = async (req,res,next) => {
         res.send(err)
     }
 }
+module.exports.getMovies = async (req,res,next) => {
+    try{
+        let data = await mongo.selectedDb.collection('theaterDetails').find().toArray()
+        let movies = []
+        let final = []
+        for(let i=0;i<data.length;i++){
+            var resu = data[i].movieRunning
+            for(let j=0;j<4;j++){
+                if(movies.includes(resu[j])==false && resu[j]!=""){
+                    var obj={
+                        name:resu[j],
+                        showlist:[[data[i].name,j]]
+                    }
+                    final.push(obj)
+                    movies.push(resu[j])
+                }
+                else if(movies.includes(resu[j])){
+                    for(let x=0;x<final.length;x++){
+                        if(final[x].name==resu[j]){
+                            final[x].showlist.push([data[i].name,j])
+                        }
+                    }
+                }   
+            }
+        }
+        res.send(final)
+    }
+    catch(err){
+        res.send(err)
+    }
+}
 
+module.exports.getMoviesbyName = async (req,res,next) => {
+    try{
+        let data = await mongo.selectedDb.collection('theaterDetails').find().toArray()
+        let final = []
+        for(let i=0;i<data.length;i++){
+            var resu = data[i].movieRunning
+            for(let j=0;j<4;j++){
+                if(resu[j]==req.params.name){
+                    final.push([data[i].name,j])
+                }  
+            }
+        }
+        if(final.length>0){
+            res.send(final)
+        }
+        else{
+            res.send("Shows currently unavailable")
+        }
+    }
+    catch(err){
+        res.send(err)
+    }
+}
