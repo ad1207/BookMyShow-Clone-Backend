@@ -18,7 +18,7 @@ app.use(cors())
 app.use(cookieParser());
 
 app.get("/",(req,res) => {
-    res.status(200).send("Welcome To BookMyShow")
+    res.status(200).send("Welcome To Ticket Booker")
 })
 
 app.use("/admin",adminRoute)
