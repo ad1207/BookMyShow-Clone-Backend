@@ -44,7 +44,7 @@ module.exports.registerAdmin = async (req,res,next) => {
             token:token
         }
 
-        res.cookie("token",token,{maxAge:3600000})
+        res.cookie("token",token,{maxAge:3600000, sameSite: 'none', secure: true})
 
         res.status(201).send(user)
 
@@ -82,7 +82,7 @@ module.exports.loginAdmin = async (req,res,next) => {
                 token: token
             }
 
-            res.cookie("token",token,{maxAge:3600000})
+            res.cookie("token",token,{maxAge:3600000, sameSite: 'none', secure: true})
 
             return res.status(200).send(user)
         }

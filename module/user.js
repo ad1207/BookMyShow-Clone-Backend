@@ -43,7 +43,7 @@ module.exports.registerUser = async (req,res,next) => {
             password:newUser.password,
             token:token
         }
-        res.cookie("token",token,{maxAge:3600000})
+        res.cookie("token",token,{maxAge:3600000, sameSite: 'none', secure: true})
 
         res.status(201).send(user)
 
@@ -79,7 +79,7 @@ module.exports.loginUser = async (req,res,next) => {
                 password: user.password,
                 token: token
             }
-            res.cookie("token",token,{maxAge:3600000})
+            res.cookie("token",token,{maxAge:3600000, sameSite: 'none', secure: true})
 
             return res.status(200).send(user)
         }
