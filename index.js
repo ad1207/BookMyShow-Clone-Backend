@@ -14,7 +14,10 @@ dotenv.config()
 const app = express()
 app.use(express.json())
 mongo.connect()
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+}))
 app.use(cookieParser());
 
 app.get("/",(req,res) => {
