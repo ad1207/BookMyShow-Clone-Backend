@@ -181,7 +181,7 @@ module.exports.getMovies = async (req,res,next) => {
                 if(movies.includes(resu[j])==false && resu[j]!=""){
                     var obj={
                         name:resu[j],
-                        showlist:[[data[i].name,j]]
+                        showlist:[{name:data[i].name,show:[j]}]
                     }
                     final.push(obj)
                     movies.push(resu[j])
@@ -189,7 +189,18 @@ module.exports.getMovies = async (req,res,next) => {
                 else if(movies.includes(resu[j])){
                     for(let x=0;x<final.length;x++){
                         if(final[x].name==resu[j]){
-                            final[x].showlist.push([data[i].name,j])
+                            flag=false
+                            let showlis = final[x].showlist
+                            for(let k=0;k<showlis.length;k++){
+                                if(showlis[k].name===data[i].name){
+                                    let tempshow = showlis[k].show;
+                                    tempshow.push(j);
+                                    flag=true
+                                }
+                            }
+                            if(flag==false){
+                                final[x].showlist.push({name:data[i].name,shoe:[j]})
+                            }
                         }
                     }
                 }   
@@ -210,7 +221,17 @@ module.exports.getMoviesbyName = async (req,res,next) => {
             var resu = data[i].movieRunning
             for(let j=0;j<4;j++){
                 if(resu[j]==req.params.name){
-                    final.push([data[i].name,j])
+                    let flag=false
+                    for(let k=0;k<final.length;k++){
+                        if(final[k].name==data[i].name){
+                            let tempshow = final[k].show;
+                            tempshow.push(j)
+                            flag=true
+                        }
+                    }
+                    if(flag===false){
+                        final.push({name:data[i].name,show:[j]})
+                    } 
                 }  
             }
         }
