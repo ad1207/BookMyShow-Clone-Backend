@@ -162,7 +162,29 @@ module.exports.getTheater = async (req,res,next) => {
 module.exports.getTheaterByName = async (req,res,next) => {
     try{
         let list = await mongo.selectedDb.collection('theaterDetails').find({name:req.params.name}).toArray()
-        res.send(list)
+        let arr = []
+        let movies = []
+        let val = list[0].movieRunning
+        for(let i=0;i<4;i++){
+            if(movies.includes(val[i])){
+                for(let j=0;j<arr.length;j++){
+                    if(arr[j].name==val[i]){
+                        let obj = arr[j].showlist
+                        obj.push(i)
+                        arr[j].showlist = obj
+                    }
+                }
+            }
+            else{
+                let obj = {
+                    name:val[i],
+                    showlist:[i]
+                }
+                movies.push(val[i])
+                arr.push(obj)
+            }
+        }
+        res.send(arr)
     }catch(err){
         console.log(err)
         res.send(err)
