@@ -119,8 +119,9 @@ module.exports.bookMovie = async (req,res,next) => {
                     seats = bookedlist[i].seatNumbers;
                     for(let x=0;x<seats.length;x++){
                         for(let y=0;y<seatNumbers.length;y++){
-                            if(x===y){
+                            if(seats[x]===seatNumbers[y]){
                                 availableseat = false
+                                break;
                             }
                         }
                     }
