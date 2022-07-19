@@ -130,7 +130,7 @@ module.exports.bookMovie = async (req,res,next) => {
             if(theaterinserted){
                 if(availableseat){
                     let finalseats = seats.concat(seatNumbers)
-                    let data = await mongo.selectedDb.collection('bookedShows').findOneAndUpdate({name:req.body.name},{$set:{seatNumbers:finalseats}})
+                    let data = await mongo.selectedDb.collection('bookedShows').findOneAndUpdate({name:req.body.name,date:req.body.date,movie:req.body.movie},{$set:{seatNumbers:finalseats}})
                     res.send(data)
                 }
                 else{
